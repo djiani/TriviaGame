@@ -105,13 +105,15 @@ function gameInitialization() {
     maxTimeoutId = setTimeout(function () {
         clearInterval(timeInterQuestId);
         console.log("time out!!!!");
+        console.log(question.answer);
         $("#solution").html(`
             <h3>Time Out!</h3>
             <p>correct answer is:  ${question.answer}</p>
             
         `);
         setTimeout(function () {
-            //gameInitialization();
+            clearTimeout(maxTimeoutId);
+            gameInitialization();
         }, 2000);
     }, 10000);
 }
@@ -131,16 +133,18 @@ $(document).ready(function () {
         if (userAnswer === question.answer && counter > 0) {
             $("#solution").html(`<h3>Good Job</h3>`);
             setTimeout(function () {
+                clearTimeout(maxTimeoutId);
                 gameInitialization();
-            }, 2000);
+            }, 3000);
         } else {
             $("#solution").html(`
                 <h3>wrong choice!</h3>
                 <p>correct answer is:  ${question.answer}</p>
             `);
             setTimeout(function () {
+                clearTimeout(maxTimeoutId);
                 gameInitialization();
-            }, 2000);
+            }, 3000);
         }
     });
 
