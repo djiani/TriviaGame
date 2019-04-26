@@ -80,7 +80,7 @@ function displayQuestion(counter, question) {
         return `
         <div>
             <h3>Time remaing is : <span class="timeRem"> ${counter}</span> seconds</h3>
-            <p class>${question.question}</p>
+            <p>${question.question}</p>
             <div>
                 ${getOptions(question.options)}
             </div>
@@ -129,20 +129,21 @@ $(document).ready(function () {
 
     $("#main").on("click", ".btnOption", function () {
         clearInterval(timeInterQuestId);
+        clearTimeout(maxTimeoutId);
+        $(".btnOption").attr("disabled", "true");
         let userAnswer = $(this).attr("data-option");
         if (userAnswer === question.answer && counter > 0) {
             $("#solution").html(`<h3>Good Job</h3>`);
             setTimeout(function () {
-                clearTimeout(maxTimeoutId);
                 gameInitialization();
             }, 3000);
         } else {
             $("#solution").html(`
                 <h3>wrong choice!</h3>
                 <p>correct answer is:  ${question.answer}</p>
+                
             `);
             setTimeout(function () {
-                clearTimeout(maxTimeoutId);
                 gameInitialization();
             }, 3000);
         }
