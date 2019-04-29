@@ -55,7 +55,9 @@ function getOptions(options) {
     return options.map(function (opt) {
         console.log(opt);
         return `
-        <button class="btnOption" data-option=${opt}> ${opt}</button>`
+        <div class="card btnOption" data-option=${opt}>
+            <div class="card-body"> ${opt}</div>
+        </div>`
     });
 }
 
@@ -79,8 +81,15 @@ function displayQuestion(counter, question) {
     if (question) {
         return `
         <div>
-            <h3>Time remaing is : <span class="timeRem"> ${counter}</span> seconds</h3>
-            <p>${question.question}</p>
+            <div class="card questionBlock">
+                <div class="card-body">
+                    <h4 class="card-title">Time Remaining is 
+                        <span class="badge badge-primary timeRem">${counter}</span>
+                        seconds
+                    </h4>
+                    <p class="card-text">${question.question}</p>
+                </div>
+            </div>
             <div>
                 ${getOptions(question.options)}
             </div>
