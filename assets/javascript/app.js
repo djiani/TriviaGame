@@ -50,6 +50,13 @@ let timeInterQuestId, maxTimeoutId = 0;
 let question = "";
 let counter = 0;
 let alreadyGene = [];
+const ImgTimeOut = "https://media.giphy.com/media/EaxciIRvOziSY/giphy.gif";
+const ImgWrongAnswer = "https://media.giphy.com/media/l4FGsc1IthILA1esE/giphy.gif";
+const ImgCorrectAnswer ="https://media.giphy.com/media/k48soGtCrLqZq/giphy-downsized.gif";
+const textTimeOut = "Ooupsss, Time Out!";
+const textWrongOut = "Sorry, your answer is not corret!";
+const textCorrectOut = "Good Job, You got right!";
+
 
 function getOptions(options) {
     return options.map(function (opt) {
@@ -102,7 +109,6 @@ function displayQuestion(counter, question) {
 
 
 function gameInitialization() {
-    $("#solution").empty();
     counter = 10;
     question = QuestionGenerator();
     $("#main").html(displayQuestion(counter, question));
@@ -113,37 +119,25 @@ function gameInitialization() {
     
     maxTimeoutId = setTimeout(function () {
         clearInterval(timeInterQuestId);
-        console.log("time out!!!!");
-        console.log(question.answer);
-        $("#solution").html();
+        $("#main").html(displaySolution(question.answer, textTimeOut, ImgTimeOut));
         setTimeout(function () {
             clearTimeout(maxTimeoutId);
-            gameInitialization(getTimeOutHtml(question.answer));
+            gameInitialization();
         }, 2000);
     }, 10000);
 }
 
-function getTimeOutHtml(answer){
-    return `
-    <h3>Time Out!</h3>
-    <p>correct answer is:  ${answer}</p>
-            
-    `;
+function displaySolution(answer, textdesc, imgurl){
+    return(  
+    `<div class="card">
+        <div class="card-body">
+            <h3 class="card-title">${textdesc}</h3>
+            <p class="card-text">The solution is :${answer}</p>
+        </div>
+        <img class="card-img-bottom imgSolution" src=${imgurl} alt="Card image" >
+    </div>` );
 }
 
-function correctAnswerHtml(answer){
-    return `
-    <h3>Good Job</h3>
-    `;
-}
-
-function wrongAnswerHtml(answer){
-    return `
-    <h3>wrong choice!</h3>
-    <p>correct answer is:  ${answer}</p>
-            
-    `;
-}
 
 $(document).ready(function () {
 
