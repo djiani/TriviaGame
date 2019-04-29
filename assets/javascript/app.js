@@ -106,19 +106,35 @@ function gameInitialization() {
         clearInterval(timeInterQuestId);
         console.log("time out!!!!");
         console.log(question.answer);
-        $("#solution").html(`
-            <h3>Time Out!</h3>
-            <p>correct answer is:  ${question.answer}</p>
-            
-        `);
+        $("#solution").html();
         setTimeout(function () {
             clearTimeout(maxTimeoutId);
-            gameInitialization();
+            gameInitialization(getTimeOutHtml(question.answer));
         }, 2000);
     }, 10000);
 }
 
+function getTimeOutHtml(answer){
+    return `
+    <h3>Time Out!</h3>
+    <p>correct answer is:  ${answer}</p>
+            
+    `;
+}
 
+function correctAnswerHtml(answer){
+    return `
+    <h3>Good Job</h3>
+    `;
+}
+
+function wrongAnswerHtml(answer){
+    return `
+    <h3>wrong choice!</h3>
+    <p>correct answer is:  ${answer}</p>
+            
+    `;
+}
 
 $(document).ready(function () {
 
@@ -133,16 +149,12 @@ $(document).ready(function () {
         $(".btnOption").attr("disabled", "true");
         let userAnswer = $(this).attr("data-option");
         if (userAnswer === question.answer && counter > 0) {
-            $("#solution").html(`<h3>Good Job</h3>`);
+            $("#solution").html(correctAnswerHtml(question.answer));
             setTimeout(function () {
                 gameInitialization();
             }, 3000);
         } else {
-            $("#solution").html(`
-                <h3>wrong choice!</h3>
-                <p>correct answer is:  ${question.answer}</p>
-                
-            `);
+            $("#solution").html(wrongAnswerHtml());
             setTimeout(function () {
                 gameInitialization();
             }, 3000);
