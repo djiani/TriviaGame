@@ -49,9 +49,9 @@ multipeChoiceQuestion = [
 let timeInterQuestId, maxTimeoutId = 0;
 let question = "";
 let counter = 0;
-let alreadyGene = [];
-const ImgTimeOut = "https://media.giphy.com/media/EaxciIRvOziSY/giphy.gif";
-const ImgWrongAnswer = "https://media.giphy.com/media/l4FGsc1IthILA1esE/giphy.gif";
+const alreadyGene = [];
+const ImgTimeOut = "https://media.giphy.com/media/l4FGsc1IthILA1esE/giphy.gif";
+const ImgWrongAnswer = "https://media.giphy.com/media/EaxciIRvOziSY/giphy.gif";
 const ImgCorrectAnswer ="https://media.giphy.com/media/k48soGtCrLqZq/giphy-downsized.gif";
 const textTimeOut = "Ooupsss, Time Out!";
 const textWrongOut = "Sorry, your answer is not corret!";
@@ -102,64 +102,66 @@ function displayQuestion(counter, question) {
             </div>
         </div>`;
     }else{
-        return `
-        <div><h3>game over!</h3></div>`;
+        return 
+        `<div><h3>game over!</h3></div>`;
     }
 }
 
-
-function gameInitialization() {
-    counter = 10;
-    question = QuestionGenerator();
-    $("#main").html(displayQuestion(counter, question));
-    timeInterQuestId = setInterval(function () {
-        counter--;
-        $(".timeRem").text(counter);
-    }, 1000);
-    
-    maxTimeoutId = setTimeout(function () {
-        clearInterval(timeInterQuestId);
-        $("#main").html(displaySolution(question.answer, textTimeOut, ImgTimeOut));
-        setTimeout(function () {
-            clearTimeout(maxTimeoutId);
-            gameInitialization();
-        }, 2000);
-    }, 10000);
-}
-
 function displaySolution(answer, textdesc, imgurl){
-    return(  
-    `<div class="card">
+    const disp =  (`<div class="card">
         <div class="card-body">
             <h3 class="card-title">${textdesc}</h3>
             <p class="card-text">The solution is :${answer}</p>
         </div>
         <img class="card-img-bottom imgSolution" src=${imgurl} alt="Card image" >
-    </div>` );
+        </div>` );
+    return disp;
+} 
+
+function playGame() {
+    counter = 10;
+    question = QuestionGenerator();
+    if(question){
+        $("#main").html(displayQuestion(counter, question));
+        timeInterQuestId = setInterval(function () {
+            counter--;
+            $(".timeRem").text(counter);
+        }, 1000);
+        
+        maxTimeoutId = setTimeout(function () {
+            clearInterval(timeInterQuestId);
+            $("#main").html(displaySolution(question.answer, textTimeOut, ImgTimeOut));
+            setTimeout(function () {
+                clearTimeout(maxTimeoutId);
+                //playGame();
+            }, 2000);
+        }, 10000); 
+    }else{
+        $("#main").html("game over over and over");
+    }
+    
 }
 
+    
 
 $(document).ready(function () {
-
-
     $("#main").on("click", ".start", function () {
-        gameInitialization();
+        playGame();
     });
 
     $("#main").on("click", ".btnOption", function () {
         clearInterval(timeInterQuestId);
         clearTimeout(maxTimeoutId);
-        $(".btnOption").attr("disabled", "true");
         let userAnswer = $(this).attr("data-option");
         if (userAnswer === question.answer && counter > 0) {
-            $("#solution").html(correctAnswerHtml(question.answer));
+            $("#main").html(displaySolution(question.answer, textCorrectOut, ImgCorrectAnswer));
             setTimeout(function () {
-                gameInitialization();
+                playGame();
             }, 3000);
         } else {
-            $("#solution").html(wrongAnswerHtml());
+            $("#main").html(displaySolution(question.answer, textWrongOut, ImgWrongAnswer));
             setTimeout(function () {
-                gameInitialization();
+                playGame();
             }, 3000);
         }
     });
