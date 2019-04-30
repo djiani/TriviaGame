@@ -60,7 +60,7 @@ const textCorrectOut = "Good Job, You got right!";
 
 function getOptions(options) {
     return options.map(function (opt) {
-        console.log(opt);
+        //console.log(opt);
         return `
         <div class="card btnOption" data-option=${opt}>
             <div class="card-body"> ${opt}</div>
@@ -73,7 +73,7 @@ function QuestionGenerator() {
     while (alreadyGene.length < multipeChoiceQuestion.length && alreadyGene.includes(ind)) {
         ind = Math.floor(Math.random() * multipeChoiceQuestion.length);
     }
-    console.log("ind = " + ind);
+    //console.log("ind = " + ind);
     alreadyGene.push(ind);
     if (alreadyGene.length > multipeChoiceQuestion.length) {
         return null;
@@ -84,9 +84,7 @@ function QuestionGenerator() {
 }
 
 function displayQuestion(counter, question) {
-    
-    if (question) {
-        return `
+    return `
         <div>
             <div class="card questionBlock">
                 <div class="card-body">
@@ -101,10 +99,6 @@ function displayQuestion(counter, question) {
                 ${getOptions(question.options)}
             </div>
         </div>`;
-    }else{
-        return 
-        `<div><h3>game over!</h3></div>`;
-    }
 }
 
 function displaySolution(answer, textdesc, imgurl){
@@ -127,19 +121,17 @@ function playGame() {
             counter--;
             $(".timeRem").text(counter);
         }, 1000);
-        
         maxTimeoutId = setTimeout(function () {
             clearInterval(timeInterQuestId);
             $("#main").html(displaySolution(question.answer, textTimeOut, ImgTimeOut));
             setTimeout(function () {
                 clearTimeout(maxTimeoutId);
-                //playGame();
+                playGame();
             }, 2000);
-        }, 10000); 
+        }, 10000);
     }else{
         $("#main").html("game over over and over");
     }
-    
 }
 
     
@@ -147,6 +139,7 @@ function playGame() {
 $(document).ready(function () {
     $("#main").on("click", ".start", function () {
         playGame();
+         
     });
 
     $("#main").on("click", ".btnOption", function () {
