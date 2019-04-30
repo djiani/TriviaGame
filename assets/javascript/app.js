@@ -89,6 +89,12 @@ function displayQuestion(counter, question) {
 
      return `
         <div>
+        <div class="progress">
+            <div class="progress-bar progress-bar-danger"  id ="questProgBar" role="progressbar" aria-valuenow="0"
+            aria-valuemin="0" aria-valuemax="100" style="width:0%">
+          0%
+        </div>
+        </div>
             <div class="card questionBlock">
                 <div class="card-body">
                     <h4 class="card-title">Time Remaining is 
@@ -124,6 +130,9 @@ function playGame() {
         timeInterQuestId = setInterval(function () {
             counter--;
             $(".timeRem").text(counter);
+            let progbar = 100-(counter/10)*100
+            $("#questProgBar").attr("style", "width:"+progbar+"%" );
+            $("#questProgBar").text(progbar+"%");
         }, 1000);
         
         maxTimeoutId = setTimeout(function () {
