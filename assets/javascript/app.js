@@ -49,13 +49,15 @@ multipeChoiceQuestion = [
 let timeInterQuestId, maxTimeoutId = 0;
 let question = "";
 let counter = 0;
-const alreadyGene = [];
+let alreadyGene = [];
 const ImgTimeOut = "https://media.giphy.com/media/l4FGsc1IthILA1esE/giphy.gif";
 const ImgWrongAnswer = "https://media.giphy.com/media/EaxciIRvOziSY/giphy.gif";
 const ImgCorrectAnswer ="https://media.giphy.com/media/k48soGtCrLqZq/giphy-downsized.gif";
 const textTimeOut = "Ooupsss, Time Out!";
 const textWrongOut = "Sorry, your answer is not corret!";
 const textCorrectOut = "Good Job, You got right!";
+let score = 0; 
+
 
 
 function getOptions(options) {
@@ -84,9 +86,8 @@ function QuestionGenerator() {
 }
 
 function displayQuestion(counter, question) {
-    
-    if (question) {
-        return `
+
+     return `
         <div>
             <div class="card questionBlock">
                 <div class="card-body">
@@ -101,10 +102,7 @@ function displayQuestion(counter, question) {
                 ${getOptions(question.options)}
             </div>
         </div>`;
-    }else{
-        return 
-        `<div><h3>game over!</h3></div>`;
-    }
+    
 }
 
 function displaySolution(answer, textdesc, imgurl){
@@ -133,15 +131,27 @@ function playGame() {
             $("#main").html(displaySolution(question.answer, textTimeOut, ImgTimeOut));
             setTimeout(function () {
                 clearTimeout(maxTimeoutId);
-                //playGame();
+                
+                playGame();
             }, 2000);
         }, 10000); 
     }else{
-        $("#main").html("game over over and over");
+        $("#main").html(gameOver(score));
+        score = 0;
+        alreadyGene = [];
     }
     
 }
 
+function gameOver(score){
+    return `<div>
+        <h1>Game over</h1>
+        <p>Your score is ${Math.floor((score/multipeChoiceQuestion.length)*100)} % </p>
+    </div>
+    <div class="card bg-primary text-white">
+        <div class="card-body start text-center">Play Again</div>
+    </div> `
+}
     
 
 $(document).ready(function () {
@@ -154,15 +164,16 @@ $(document).ready(function () {
         clearTimeout(maxTimeoutId);
         let userAnswer = $(this).attr("data-option");
         if (userAnswer === question.answer && counter > 0) {
+            score++;
             $("#main").html(displaySolution(question.answer, textCorrectOut, ImgCorrectAnswer));
             setTimeout(function () {
                 playGame();
-            }, 3000);
+            }, 2000);
         } else {
             $("#main").html(displaySolution(question.answer, textWrongOut, ImgWrongAnswer));
             setTimeout(function () {
                 playGame();
-            }, 3000);
+            }, 2000);
         }
     });
 
